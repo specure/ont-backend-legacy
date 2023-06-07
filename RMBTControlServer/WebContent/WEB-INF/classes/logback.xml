@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="15 seconds" debug="true">
+
+  <!-- always a good activate OnConsoleStatusListener -->
+  <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+
+  <appender name="STDOUT_CONTROL_SERVER" class="ch.qos.logback.core.ConsoleAppender">
+    <Target>System.out</Target>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>INFO</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE_CONTROL_SERVER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${catalina.base}/logs/nettest/rmbt_control_server.lg</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${catalina.base}/logs/nettest/rmbt_control_server/rmbt_control_server.%i.log.gz</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>20</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>50MB</maxFileSize>
+    </triggeringPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!--<appender name="htmlAppender" class="ch.qos.logback.core.FileAppender">-->
+    <!--<file>${catalina.base}/logs/nettest/log.html</file>-->
+    <!--<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">-->
+      <!--<layout class="ch.qos.logback.classic.html.HTMLLayout">-->
+        <!--<pattern>%thread%level%logger%msg</pattern>-->
+      <!--</layout>-->
+    <!--</encoder>-->
+  <!--</appender>-->
+
+  <root level="DEBUG">
+    <appender-ref ref="STDOUT_CONTROL_SERVER" />
+    <appender-ref ref="FILE_CONTROL_SERVER" />
+    <!--<appender-ref ref="htmlAppender" />-->
+  </root>
+
+</configuration>
