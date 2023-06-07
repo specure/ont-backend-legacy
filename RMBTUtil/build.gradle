@@ -1,0 +1,8 @@
+apply from: '../jar_project.gradle'
+
+dependencies {
+    compile group: 'org.json', name: 'json', version: org_json_version
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: logback_classic_version
+    compile group: 'ch.qos.logback', name: 'logback-core', version: logback_core_version
+    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4j_api_version
+}
