@@ -1,0 +1,32 @@
+apply from: '../war_project.gradle'
+
+// TODO: WORK IN PROGRESS
+
+dependencies {
+	providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: javax_servlet_version
+	compile 'javax.servlet:jstl:1.2'
+
+	compile group: 'org.springframework', name: 'spring-webmvc', version: '4.1.6.RELEASE'
+
+	compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
+    compile group: 'javax.transaction', name: 'javax.transaction-api'
+
+	compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
+	compile group: 'org.hibernate', name: 'hibernate-envers'
+    compile group: 'org.hibernate', name: 'hibernate-validator'
+
+    compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version
+
+    compile group: 'org.apache.poi', name: 'poi', version: poi_version
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: poi_version
+    compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: poi_version
+
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jackson_version
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
+
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpclient_version
+
+    compile group: 'joda-time', name: 'joda-time', version: joda_time_version
+
+	testCompile group: 'junit', name: 'junit', version: '4.7'
+}
