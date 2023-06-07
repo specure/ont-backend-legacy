@@ -1,0 +1,72 @@
+<article class="main-content angular-template">
+	<div data-ng-rest-loadlist="providers" data-ng-rest-orderby="uid"></div>
+	<div data-ng-page-title="as2provider"></div>
+	
+	<section class="list-table">
+		<table id="list-table">
+			<colgroup>
+				<col style="width:5%" />
+				<col style="width:15%" />
+				<col style="width:40%" />
+				<col style="width:40%" />
+				<col style="width:5%" />
+			</colgroup>
+			<thead>
+				<tr class="toolbar">
+					<td colspan="7">
+						<div class="edit-buttons">
+							<a href="" data-ng-click="add()" class="edit-button button-add"></a>
+						</div>
+					</td>
+				</tr>
+				
+				<tr class="table-header">
+					<td><a href="" data-ng-click="predicate = 'data.uid'; reverse=!reverse">uid</a></td>
+					<td><a href="" data-ng-click="predicate = 'data.asn'; reverse=!reverse">asn</a></td>
+					<td><a href="" data-ng-click="predicate = 'data.dnsPart'; reverse=!reverse">dns_part</a></td>
+					<td><a href="" data-ng-click="predicate = 'data.providerId'; reverse=!reverse">provider_id</a></td>
+					<td />
+				</tr>
+				
+			</thead>
+			<tbody data-ng-repeat="item in items | orderBy:predicate:reverse">
+				<tr data-ng-class="{'even' : $index % 2 == 1}">
+					<td data-ng-bind="item.data.uid"></td>
+					<td>
+						<span data-ng-bind="item.data.asn" data-ng-hide="item.isEdit"></span>
+						<input data-ng-cloak type="text" empty-to-null data-ng-model="item.data.asn" data-ng-show="item.isEdit" />
+					</td>
+					<td>
+						<span data-ng-bind="item.data.dnsPart" data-ng-hide="item.isEdit"></span>
+						<input data-ng-cloak type="text" empty-to-null data-ng-model="item.data.dnsPart" data-ng-show="item.isEdit" />
+					</td>
+					<td>
+						<span data-ng-bind="join('providers', 'uid', item.data.providerId, 'name')" data-ng-hide="item.isEdit"></span>
+						<select data-ng-cloak data-ng-model="item.data.providerId" data-ng-options="provider.uid as provider.name for provider in providers" data-ng-show="item.isEdit"></select>
+					</td>
+					<td data-ng-init="item.isEdit">
+						<div data-ng-cloak class="edit-buttons" data-ng-show="item.isEdit">
+							<a href="" id="item.uid" data-ng-click="save(item);" class="edit-button button-save"></a>
+							<a href="" id="item.uid" data-ng-click="restore(item); item.isEdit=false;" class="edit-button button-cancel"></a>
+						</div>
+						<div class="edit-buttons" data-ng-hide="item.isEdit">
+							<a href="" id="item.uid" data-ng-click="edit(item); item.isEdit=true;" class="edit-button button-edit"></a>
+							<a href="" id="item.uid" data-ng-click="remove(item);" class="edit-button button-delete"></a>
+						</div>					
+					</td>
+					
+				</tr>
+				<tr data-ng-cloak data-ng-init="item.error=false" data-ng-show="item.error">
+					<td colspan="7" class="error-row ignore-odd-even">
+						There has been an error. <a href="" data-ng-click="showErrorDetail(item.info)">Click here</a> to see detailed information. <a href="" data-ng-click="item.info=''; item.error=false;">Remove</a> this info box.
+					</td>
+				</tr>
+				<tr data-ng-cloak data-ng-init="item.success=false" data-ng-show="item.success">
+					<td colspan="7" class="success-row ignore-odd-even">
+						Operation successful. <a href="" data-ng-click="item.info=''; item.success=false;">Remove</a> this info box.
+					</td>
+				</tr>				
+			</tbody>
+		</table>
+	</section>
+</article>
