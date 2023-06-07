@@ -1,0 +1,15 @@
+apply plugin: 'war'
+
+project.webAppDirName = 'WebContent'
+
+sourceSets {
+    main {
+        java { srcDir 'src' }
+        resources { srcDirs = ['src','WebContent/WEB-INF/classes'] }
+    }
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
