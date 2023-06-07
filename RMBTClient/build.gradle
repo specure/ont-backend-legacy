@@ -1,0 +1,145 @@
+apply from: '../jar_project.gradle'
+
+configurations {
+    // configuration that holds jars to include in the jar
+    extraLibs
+}
+
+def revisionPropertiesFile = file("${buildDir}/resources/main/revision.properties")
+
+processResources  {
+   doLast {
+    String revisionProperties = "git.describe=" + getVersionNameFromGit() + "\n"
+    revisionProperties = revisionProperties + "git.branch=" + getBranchFromGit() + "\n"
+    revisionProperties = revisionProperties + "git.dirty=false \n"
+    revisionProperties = revisionProperties + "git.id=" + getHashFromGit() + "\n"
+    revisionProperties = revisionProperties + "git.revision=" + getVersionCodeFromGit() + "\n"
+    revisionPropertiesFile.write(revisionProperties, 'UTF-8')
+  }
+}
+
+dependencies {
+    compile project(':RMBTUtil')
+
+    compile group: 'dnsjava', name: 'dnsjava', version: dnsjava_version
+    compile group: 'net.sf.jopt-simple', name: 'jopt-simple', version: jopt_simple_version
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpclient_version
+    compile group: 'org.json', name: 'json', version: org_json_version
+    compile group: 'net.sf.jopt-simple', name: 'jopt-simple', version: jopt_simple_version
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpclient_version
+    compile group: 'com.google.code.gson', name: 'gson', version: gson_version
+
+    extraLibs group: 'dnsjava', name: 'dnsjava', version: dnsjava_version
+    extraLibs group: 'net.sf.jopt-simple', name: 'jopt-simple', version: jopt_simple_version
+    extraLibs group: 'org.json', name: 'json', version: org_json_version
+    extraLibs group: 'org.apache.httpcomponents', name: 'httpclient', version: httpclient_version
+    extraLibs group: 'com.google.code.gson', name: 'gson', version: gson_version
+
+}
+
+//jar {
+//    manifest {
+//        attributes 'Main-Class': 'at.alladin.rmbt.client.RMBTClientRunner'
+//        attributes 'Permissions': 'all-permissions'
+//        attributes 'Application-Name': 'RMBT Command Line Client'
+//    }
+//    exclude 'META-INF/DEPENDENCIES'
+//    exclude 'META-INF/LICENSE'
+//    exclude 'META-INF/LICENSE.txt'
+//    exclude 'META-INF/NOTICE'
+//    exclude 'META-INF/NOTICE.txt'
+//
+//    from configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+//
+//}
+//
+//
+////add cert to keystore with command: keytool -list -storetype pkcs12 -keystore specure-2018.p12
+//jar.doLast {
+//    def libFiles = files { file('build/libs').listFiles() }
+//    libFiles.each {
+//        ant.signjar(
+//                jar: 'build/libs/*.jar',
+//                alias: "s2021",
+//                storetype: "pkcs12",
+//                storepass: "9uSX6SR22qXG",
+//                keystore: "specure-2021.p12",
+//                preservelastmodified: "true")
+//    }
+//}
+
+
+// lite version
+task jarLiteVersion(type: Jar, dependsOn: classes) {
+
+    archiveBaseName = 'RMBTClient'
+    archiveVersion = '1.0'
+    //archiveName = 'RMBTClient-1.0.jar'
+    manifest {
+        attributes 'Main-Class': 'at.alladin.rmbt.client.RMBTClientRunner'
+        attributes 'Permissions': 'all-permissions'
+        attributes 'Application-Name': 'RMBT Command Line Client'
+    }
+    exclude 'META-INF/DEPENDENCIES'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE'
+    exclude 'META-INF/NOTICE.txt'
+
+
+    from sourceSets.main.output
+    from configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+// full version
+task jarFullVersion(type: Jar) {
+
+    archiveBaseName = 'RMBTFullClient'
+    archiveVersion = '1.0'
+    //archiveName = 'RMBTFullClient-1.0.jar'
+    manifest {
+        attributes 'Main-Class': 'at.alladin.rmbt.client.RMBTFullClientRunner'
+        attributes 'Permissions': 'all-permissions'
+        attributes 'Application-Name': 'RMBT Command Line Client'
+    }
+    exclude 'META-INF/DEPENDENCIES'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE'
+    exclude 'META-INF/NOTICE.txt'
+
+    from sourceSets.main.output
+    from configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+artifacts {
+    archives jarLiteVersion, jarFullVersion
+}
+
+
+//add cert to keystore with command: keytool -list -storetype pkcs12 -keystore specure-2018.p12
+jarLiteVersion.doLast {
+    def libFiles = files { file('build/libs').listFiles() }
+    libFiles.each {
+        ant.signjar(
+                jar: 'build/libs/*.jar',
+                alias: "s2021",
+                storetype: "pkcs12",
+                storepass: "9uSX6SR22qXG",
+                keystore: "specure-2021.p12",
+                preservelastmodified: "true")
+    }
+}
+
+jarFullVersion.doLast {
+    def libFiles = files { file('build/libs').listFiles() }
+    libFiles.each {
+        ant.signjar(
+                jar: 'build/libs/*.jar',
+                alias: "s2021",
+                storetype: "pkcs12",
+                storepass: "9uSX6SR22qXG",
+                keystore: "specure-2021.p12",
+                preservelastmodified: "true")
+    }
+}
