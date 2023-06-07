@@ -1,0 +1,40 @@
+apply from: '../war_project.gradle'
+
+subprojects {
+    evaluationDependsOn(':RMBTSharedCode')
+}
+
+def revisionPropertiesFile = file("${buildDir}/resources/main/revision.properties")
+
+dependencies {
+    compile project(':RMBTSharedCode')
+
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: javax_servlet_version
+    
+    compile group: 'org.json', name: 'json', version: org_json_version
+    compile group: 'commons-io', name: 'commons-io', version: commons_io_version
+    compile group: 'org.restlet.jee', name: 'org.restlet.ext.json', version: restlet_ext_json_version
+    compile group: 'org.restlet.jee', name: 'org.restlet.ext.servlet', version: restlet_ext_servlet_version
+    //compile group: 'net.sf.uadetector', name: 'uadetector-resources', version: uadetector_resources_version
+    compile group: 'eu.bitwalker', name: 'UserAgentUtils', version: '1.21'
+    compile group: 'com.maxmind.geoip', name: 'geoip-api', version: geoip_version
+    // test dependencies
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.4'
+}
+
+processResources {
+    doLast {
+        String revisionProperties = "git.describe=" + getVersionNameFromGit() + "\n"
+        revisionProperties = revisionProperties + "git.branch=" + getBranchFromGit() + "\n"
+        revisionProperties = revisionProperties + "git.dirty=false \n"
+        revisionProperties = revisionProperties + "git.id=" + getHashFromGit() + "\n"
+        revisionProperties = revisionProperties + "git.revision=" + getVersionCodeFromGit() + "\n"
+        revisionPropertiesFile.write(revisionProperties, 'UTF-8')
+    }
+}
+
+war {
+    exclude 'WEB-INF/lib/**'
+    exclude 'WEB-INF/classes/**'
+    exclude 'META-INF/context.xml'
+}
